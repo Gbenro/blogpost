@@ -3,25 +3,35 @@ import {Field, reduxForm} from 'redux-form';;
 
 
 class PostsNew extends Component {
- state={
 
- }
+    
     renderField=(field)=>{
+
+        const {meta:{touched,error}}= field;
+    const className = `form-group ${touched && error ? 'has-danger': ''}`
+
         return (
-            <div className = "form-group">
+            <div className = {className}>
                 <label>{field.label}</label>
                 <input className= "form-control"
                     type="text"
                     {...field.input}
                 />
+                <div className="text-help">
+                {touched ? error : ''}
+                </div>
             </div>
         )
     }
-
+    onSubmit(values){
+        console.log(values);
+    }
   
     render() {
+        const {handleSubmit} = this.props;
+
         return (
-        <form>
+        <form onSubmit ={handleSubmit(this.onSubmit.bind(this))}> 
             <Field 
             name= "title"
             label="Title"
@@ -37,6 +47,7 @@ class PostsNew extends Component {
             label="Post Content"
             component = {this.renderField}
             />
+            <button type ="sumbit" className= "btn btn-primary" >Submit</button>
         </form>
         );
     }
@@ -56,7 +67,7 @@ class PostsNew extends Component {
         }
 
         //If errors is empty, the form is fine to submit
-        //If errors has * any* properties, redux form assumes form is invalid
+        //If errors has *any* properties, redux form assumes form is invalid
         return errors;
     }
 
